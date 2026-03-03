@@ -1,2 +1,1 @@
-# ML_with_GCP
-Repo to learn more about ML and MLOps
+Simple repo to learn more about production ready pipelines.
