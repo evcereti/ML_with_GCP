@@ -1,0 +1,3 @@
+[paths]
+raw_local = "data/raw.csv"
+raw_gcs = "gs://telco-churn-data-test/raw.csv"
