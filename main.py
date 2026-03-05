@@ -1,5 +1,5 @@
 import tomli as tomllib
-from src.ingest import read_data, validate_schema
+from src.ingest import read_data, validate_schema, drop_columns
 import logging
 from logging import getLogger
 
@@ -24,11 +24,13 @@ if __name__ == "__main__":
     config = load_config()
 
     data_path = config["tables"]["churn"]["path"]["raw_local"]
-    required_columns = config["tables"]["churn"]["schema"]["required_columns"]
+    schema_columns = config["tables"]["churn"]["schema"]["columns"]
 
     logger.info(f"Starting pipeline")
     df = read_data(data_path)
-    if validate_schema(df, required_columns):
-        logger.info(f"Data preview:\n{df.head()}")
+    if validate_schema(df, schema_columns):
+        logger.info(f"Schema validated. Data preview:\n{df.head(2)}")
+        df = drop_columns(df, schema_columns)
+        logger.info(f"Unused columns dropped. Data preview:\n{df.head(2)}")
     else:
         logger.error("Data schema validation failed.")
