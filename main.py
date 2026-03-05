@@ -1,5 +1,5 @@
 import tomli as tomllib
-from src.train import read_data
+from src.ingest import read_data, validate_schema
 import logging
 from logging import getLogger
 
@@ -23,8 +23,12 @@ def load_config(config_path: str = "config.toml") -> dict:
 if __name__ == "__main__":
     config = load_config()
 
-    data_path = config["paths"]["raw_local"]
+    data_path = config["tables"]["churn"]["path"]["raw_local"]
+    required_columns = config["tables"]["churn"]["schema"]["required_columns"]
 
     logger.info(f"Starting pipeline")
     df = read_data(data_path)
-    logger.info(f"Data preview:\n{df.head()}")
+    if validate_schema(df, required_columns):
+        logger.info(f"Data preview:\n{df.head()}")
+    else:
+        logger.error("Data schema validation failed.")
