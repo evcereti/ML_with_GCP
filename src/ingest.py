@@ -19,6 +19,14 @@ def read_data(path: str) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
+def enforce_types(df: DataFrame, rules: dict) -> DataFrame:  
+    cols_to_numeric = rules.get('force_float', [])
+    for col in cols_to_numeric:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+        df[col] = df[col].fillna(0.0)
+    return df
+
+
 def validate_schema(df: DataFrame, schema_columns: dict) -> bool:
     """Validates the schema of the DataFrame.
 
