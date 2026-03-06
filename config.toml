@@ -1,3 +1,7 @@
+[project]
+name = "Telco Churn Prediction"
+environment = "local" ##local, cloud
+
 [tables]
 
 [tables.churn]
