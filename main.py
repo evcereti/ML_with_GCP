@@ -1,5 +1,5 @@
 import tomli as tomllib
-from src.ingest import read_data, validate_schema, drop_columns
+from src.ingest import read_data, validate_schema, drop_columns, enforce_types
 import logging
 from logging import getLogger
 
@@ -32,9 +32,11 @@ if __name__ == "__main__":
         raise ValueError(f"Environment not recognized: {environment}")
 
     schema_columns = config["tables"]["churn"]["schema"]["columns"]
-
+    numeric_rules = config["tables"]["churn"]["preprocessing"]["numerics"]
     logger.info(f"Starting pipeline")
     df = read_data(data_path)
+    df = enforce_types(df, numeric_rules)
+    logger.info(f"Data preprocessing completed.")
     if validate_schema(df, schema_columns):
         logger.info(f"Schema validated. Data preview:\n{df.head(2)}")
         df = drop_columns(df, schema_columns)
