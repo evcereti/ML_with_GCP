@@ -23,7 +23,14 @@ def load_config(config_path: str = "config.toml") -> dict:
 if __name__ == "__main__":
     config = load_config()
 
-    data_path = config["tables"]["churn"]["path"]["raw_local"]
+    environment = config["project"]["environment"]
+    if environment == "local":
+        data_path = config["tables"]["churn"]["path"]["raw_local"]
+    elif environment == "cloud":
+        data_path = config["tables"]["churn"]["path"]["raw_gcs"]
+    else:
+        raise ValueError(f"Environment not recognized: {environment}")
+
     schema_columns = config["tables"]["churn"]["schema"]["columns"]
 
     logger.info(f"Starting pipeline")
