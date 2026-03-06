@@ -34,3 +34,7 @@ target = "Churn"
 'MonthlyCharges' = 'float64'
 'TotalCharges' = 'float64'
 'Churn' = 'object'
+
+[tables.churn.preprocessing]
+[tables.churn.preprocessing.numerics]
+force_float = ['TotalCharges']
